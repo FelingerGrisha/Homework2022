@@ -1,24 +1,27 @@
-import sys
 from itertools import permutations
 
 with open("input.txt", "r") as iFile:
     InputData = iFile.readlines()
 
 places = set()
-distances = dict()
+distances = {}
 
 for line in InputData:
-    (source, _, dest, _, distance) = line.split()
-    places.add(source)
-    places.add(dest)
-    distances.setdefault(source, dict())[dest] = int(distance)
-    distances.setdefault(dest, dict())[source] = int(distance)
+    split_line = line.split(" ")
+    start, end = split_line[0], split_line[2]
+    places.add(start)
+    places.add(end)
+    distances[start + end] = int(split_line[4])
+    distances[end + start] = int(split_line[4])
 
-shortest = sys.maxsize
+shortest = 999999
 
-for items in permutations(places):
-    dist = sum(map(lambda x, y: distances[x][y], items[:-1], items[1:]))
-    shortest = min(shortest, dist)
+for combination in permutations(places):
+    length = 0
+    for firstPlace, secondPlace in zip(combination[:-1], combination[1:]):
+        length += distances[firstPlace + secondPlace]
+    if length < shortest:
+        shortest = length
 
 with open("output1.txt", "w") as oFile:
     oFile.write(str(shortest))
