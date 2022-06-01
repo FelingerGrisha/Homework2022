@@ -20,4 +20,4 @@ def sumOfItem(item):
         return item
 
 with open('output2.txt', 'w') as oFile:
-    oFile.write(sumOfItem(InputData))
+    oFile.write(str(sumOfItem(InputData)))
